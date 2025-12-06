@@ -22,6 +22,7 @@ user_controller = UserController(db_controller)
 template_index = env.get_template("index.html")
 template_users = env.get_template("users.html")
 template_currencies = env.get_template("currencies.html")
+template_author = env.get_template("author.html")
 
 main_author = Author("Яна Литвиновская", "Р3124")
 app_instance = App("Вывод валют", "1.0", main_author)
@@ -100,12 +101,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.show_index(params)
         elif path == '/users':
             self.show_users(params)
+        elif path == '/author':
+            self.show_author(params)
         elif path == '/user':
             self.show_user(params)
         elif path == '/currencies':
             self.show_currencies(params)
         elif path == '/currency/add':
-            self.add_currency(params)  # Добавляем этот маршрут
+            self.add_currency(params)
         elif path == '/currency/delete':
             self.delete_currency(params)
         elif path == '/currency/update':
@@ -135,6 +138,19 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 'currencies_count': len(currencies),
                 'subscriptions_count': total_subscriptions
             }
+        )
+
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(result.encode("utf-8"))
+
+    def show_author(self, params=None):
+        """Страница об авторе"""
+        result = template_author.render(
+            myapp=app_instance.name,
+            author_name=main_author.name,
+            author_group=main_author.group
         )
 
         self.send_response(200)
@@ -228,7 +244,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 self.send_error(400, "Укажите символьный код валюты (например: USD, EUR)")
                 return
 
-            # Проверяем формат кода (3 буквы)
+            # Проверяем формат кода 
             if len(char_code) != 3 or not char_code.isalpha():
                 self.send_error(400, "Символьный код должен состоять из 3 латинских букв")
                 return
