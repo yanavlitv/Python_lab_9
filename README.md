@@ -1,4 +1,4 @@
-#Цель работы
+1. Цель работы
 
 Реализовать CRUD (Create, Read, Update, Delete) для сущностей бизнес-логики приложения.
 
@@ -16,7 +16,7 @@
 
 Научиться тестировать функционал на примере сущностей currency и user с использованием unittest.mock.
 
-#Модели, свойства и связи
+2. Модели, свойства и связи
 
 ##Модель Currency (Валюта):
 
@@ -48,6 +48,8 @@ currency_id - внешний ключ к Currency
 
 Связи: User (1) ↔ (n) UserCurrency (n) ↔ (1) Currency
 
+3. Структура
+   
 ```python
 ├── myapp.py                    # Главный файл приложения
 ├── requirements.txt           # Зависимости
@@ -73,7 +75,7 @@ currency_id - внешний ключ к Currency
     ├── currencies_api.py    # API ЦБ РФ
     └── char_codes.py        # Получение кодов валют
 ```
-#Реализация CRUD с SQL-запросами
+4. Реализация CRUD с SQL-запросами
 ```python
 #CREATE:
 sql
@@ -89,3 +91,46 @@ UPDATE currency SET value = ? WHERE id = ?
 sql
 DELETE FROM currency WHERE id = ?
 ```
+5. Примеры работы приложения:
+   ![Главная](screens/screen1.png)
+   ![Пользователи](screens/screen2.png)
+   ![Валюты](screens/screen3.png)
+   ![Пользователь](screens/screen4.png)
+
+6. Тесты с unittest.mock
+   
+```python
+import unittest
+from unittest.mock import MagicMock
+from controllers.currencycontroller import CurrencyController
+
+class TestCurrencyController(unittest.TestCase):
+    def test_list_currencies(self):
+        mock_db = MagicMock()
+        mock_db.read_currencies.return_value = [
+            {"id": 1, "char_code": "USD", "value": 90.0}
+        ]
+        controller = CurrencyController(mock_db)
+        result = controller.list_currencies()
+        self.assertEqual(result[0]['char_code'], "USD")
+        mock_db.read_currencies.assert_called_once()
+
+    def test_delete_currency(self):
+        mock_db = MagicMock()
+        mock_db.delete_currency.return_value = True
+        controller = CurrencyController(mock_db)
+        result = controller.delete_currency(1)
+        self.assertTrue(result)
+        mock_db.delete_currency.assert_called_once_with(1)
+#Результаты тестов:
+
+text
+Всего тестов: 6
+Успешно: 6
+Провалено: 0
+Ошибок: 0
+```
+7. Вывод
+
+Приложение готово: есть создание, чтение, обновление и удаление валют. Работает с базой данных, отображает курсы из ЦБ РФ, имеет поиск и удобный интерфейс. Все функции работают, тесты проходят.
+
