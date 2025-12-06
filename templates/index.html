@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{myapp}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-4">
+        <!-- Навигация -->
+        <ul class="nav nav-pills mb-4">
+            <li class="nav-item">
+                <a class="nav-link active" href="/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/author">Об авторе</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/users">Пользователи</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/currencies">Валюты</a>
+            </li>
+        </ul>
+
+        <h1>{{myapp}}</h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2>Об авторе</h2>
+                <p class="mb-0">{{ author_name }}</p>
+                <p class="mb-0">{{ author_group }}</p>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>{{ stats.users_count }}</h3>
+                        <p>Пользователей</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>{{ stats.currencies_count }}</h3>
+                        <p>Валют</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>{{ stats.subscriptions_count }}</h3>
+                        <p>Подписок</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Упрощенная таблица валют -->
+        {% if currencies %}
+        <h2>Некоторые валюты</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Код</th>
+                <th>Название</th>
+                <th>Курс</th>
+                <th>Номинал</th>
+            </tr>
+            {% for currency in currencies %}
+            <tr>
+                <td>{{ currency.char_code }}</td>
+                <td>{{ currency.name }}</td>
+                <td>{{ currency.value }}</td>
+                <td>{{ currency.nominal }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+  </body>
+</html>

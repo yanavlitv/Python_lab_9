@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Пользователи - {{myapp}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-4">
+        <!-- Навигация -->
+      <ul class="nav nav-pills mb-4">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/author">Об авторе</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/users">Пользователи</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/currencies">Валюты</a>
+        </li>
+      </ul>
+
+      <h1>Пользователи</h1>
+
+      {% if selected_user %}
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3>{{ selected_user.name }}</h3>
+          <p>ID: {{ selected_user.id }}</p>
+
+          <h5>Отслеживает валюты:</h5>
+          {% if user_subscriptions %}
+          <ul class="list-group">
+            {% for sub in user_subscriptions %}
+            <li class="list-group-item">
+              {{ sub.char_code }} - {{ sub.name }} ({{ sub.value }} руб. за {{ sub.nominal }} ед.)
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted">Нет подписок</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <h3>Все пользователи</h3>
+      <ul class="list-group">
+        {% for user in users %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <!-- ИСПРАВЛЕНО: убрал .user. так как user уже словарь -->
+          <a href="/users?user_id={{ user.id }}">{{ user.name }}</a>
+          <span class="badge bg-primary rounded-pill">{{ user.subscriptions_count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Назад на главную -->
+      <div class="mt-4">
+        <a href="/" class="btn btn-outline-primary">← На главную</a>
+      </div>
+    </div>
+  </body>
+</html>
